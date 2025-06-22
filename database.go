@@ -42,15 +42,26 @@ func (db *Database) CreateEggRack(rack EggRack) (*EggRack, error) {
 	return &rack, nil
 }
 
-func (db *Database) CreateBulkEggRacks(username string, bigCount, mediumCount, smallCount int) ([]EggRack, error) {
+func (db *Database) CreateBulkEggRacks(username string, jumboCount, bigCount, mediumCount, smallCount int) ([]EggRack, error) {
 	db.mu.Lock()
 	defer db.mu.Unlock()
 
-	if bigCount < 0 || mediumCount < 0 || smallCount < 0 {
+	if jumboCount < 0 || bigCount < 0 || mediumCount < 0 || smallCount < 0 {
 		return nil, errors.New("egg counts cannot be negative")
 	}
 
 	var created []EggRack
+
+	for i := 0; i < jumboCount; i++ {
+		rack := EggRack{
+			ID:          uuid.New(),
+			EggType:     EggTypeJumbo,
+			DateCreated: time.Now().UTC(),
+			User:        username,
+		}
+		db.EggRacks = append(db.EggRacks, rack)
+		created = append(created, rack)
+	}
 	for i := 0; i < bigCount; i++ {
 		rack := EggRack{
 			ID:          uuid.New(),

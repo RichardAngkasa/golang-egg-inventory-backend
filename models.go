@@ -10,12 +10,14 @@ import (
 type EggTypeEnum string
 
 const (
+	EggTypeJumbo  EggTypeEnum = "jumbo"
 	EggTypeBig    EggTypeEnum = "big"
 	EggTypeMedium EggTypeEnum = "medium"
 	EggTypeSmall  EggTypeEnum = "small"
 )
 
 var validEggTypes = map[EggTypeEnum]bool{
+	EggTypeJumbo:  true,
 	EggTypeBig:    true,
 	EggTypeMedium: true,
 	EggTypeSmall:  true,
@@ -30,12 +32,12 @@ type EggRack struct {
 	ID          uuid.UUID   `json:"id"`
 	EggType     EggTypeEnum `json:"egg_type"`
 	DateCreated time.Time   `json:"date_created"`
-	User        string      `json:"User"`
+	User        string      `json:"user"`
 }
 
 func (e *EggRack) Validate() error {
 	if !validEggTypes[e.EggType] {
-		return errors.New("invalid egg type: must big, medium, or small")
+		return errors.New("invalid egg type: must jumbo, big, medium, or small")
 	}
 	if e.User == "" {
 		return errors.New("user can't be empty")

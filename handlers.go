@@ -55,6 +55,7 @@ func (h *Handlers) CreateBulkEggRacks(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var counts struct {
+		JumboCount  int `json:"jumbo_count"`
 		BigCount    int `json:"big_count"`
 		MediumCount int `json:"medium_count"`
 		SmallCount  int `json:"small_count"`
@@ -65,7 +66,7 @@ func (h *Handlers) CreateBulkEggRacks(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	created, err := h.db.CreateBulkEggRacks(username, counts.BigCount, counts.MediumCount, counts.SmallCount)
+	created, err := h.db.CreateBulkEggRacks(username, counts.JumboCount, counts.BigCount, counts.MediumCount, counts.SmallCount)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
